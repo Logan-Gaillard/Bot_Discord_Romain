@@ -1,0 +1,29 @@
+{
+  "name": "botmalicieux",
+  "version": "1.0.0",
+  "description": "Bot discord sur mesure pour romain_roro__",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "start": "npm run build && node --enable-source-maps dist/index.js",
+    "commands": "npm run build && node --enable-source-maps dist/deploy-commands.js"
+  },
+  "author": "Logan-Gaillard",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/voice": "^0.18.0",
+    "bufferutil": "^4.0.9",
+    "discord.js": "^14.24.2",
+    "dotenv": "^17.2.3",
+    "zlib-sync": "^0.1.10"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^22.19.1",
+    "eslint": "^9.39.1",
+    "nodemon": "^3.1.11",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
