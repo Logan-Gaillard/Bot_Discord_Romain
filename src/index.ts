@@ -1,19 +1,15 @@
-import {
-  Client,
-  Collection,
-  Events,
-  GatewayIntentBits,
-  MessageFlags,
-} from "discord.js";
+import env from "./config.js";
+
+import { Client, Collection, GatewayIntentBits } from "discord.js";
 
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import fs from "node:fs";
 
-import dotenv from "dotenv";
-dotenv.config();
+import { listen } from "./server/data-receiver.js";
+listen();
 
-const client = new Client({
+export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 }) as any;
 client.commands = new Collection();
@@ -63,5 +59,5 @@ for (const file of eventFiles) {
   }
 }
 
-const token = process.env.DISCORD_TOKEN ? process.env.DISCORD_TOKEN : "";
+const token = env.DISCORD_TOKEN ? env.DISCORD_TOKEN : "";
 client.login(token);

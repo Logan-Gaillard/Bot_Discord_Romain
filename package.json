@@ -15,8 +15,10 @@
     "@discordjs/voice": "^0.18.0",
     "@jimp/gif": "^0.22.12",
     "canvas": "^3.2.0",
+    "crypto": "^1.0.1",
     "discord.js": "^14.24.2",
     "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "jimp": "^1.6.0",
     "zlib-sync": "^0.1.10"
   },
