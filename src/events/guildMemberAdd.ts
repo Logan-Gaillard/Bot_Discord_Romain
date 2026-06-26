@@ -5,7 +5,7 @@ import { getChannels, Channel } from "../utils/getChannels.js";
 export default {
   name: Events.GuildMemberAdd,
   async execute(member: GuildMember) {
-    if (member.guild.id !== "1437881720421744662") return;
+    //if (member.guild.id !== "1437881720421744662") return;
 
     //Envoie d'un message de bienvenue dans le channel "general" du serveur
     const channel = member.guild.channels.cache.get(getChannels(Channel.ARRIVANTS));
