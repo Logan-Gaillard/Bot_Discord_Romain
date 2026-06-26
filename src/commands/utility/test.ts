@@ -19,9 +19,13 @@ export default {
       flags: MessageFlags.Ephemeral,
     });
 
-    await interaction.client.emit(
+    interaction.client.emit(
       Events.GuildMemberAdd,
       interaction.member as GuildMember
     );
+
+    await interaction.editReply({
+      content: "Test terminé !",
+    });
   },
 };

@@ -61,10 +61,16 @@ export async function initEventSubRenew() {
       await deleteSub(sub.id);
     }
 
+    const env = process.env.ENVIRONMENT || "development";
+    const callbackUrl =
+      env === "production"
+        ? "https://romain_bot.logangaillard.fr/twitch/eventsub"
+        : "https://statue-astronaut-paragraph.ngrok-free.dev/twitch/eventsub";
+
     await createSub(
       "stream.online",
-      { broadcaster_user_id: "486250699" },
-      "https://statue-astronaut-paragraph.ngrok-free.dev/twitch/eventsub"
+      { broadcaster_user_id: "1323092263" },
+      callbackUrl
     );
   }
 }

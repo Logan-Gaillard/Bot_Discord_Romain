@@ -5,6 +5,7 @@ import env from "../config.js";
 import { getTwitchAvatar, getTwitchStream } from "./twitch/utils.js";
 import { sendEmbedToChannel } from "../utils/sendMessage.js";
 import { initEventSubRenew } from "./twitch/subsManager.js";
+import { getChannels, Channel } from "../utils/getChannels.js";
 
 // ── Constantes Twitch EventSub ────────────────────────────────────────────────
 
@@ -22,7 +23,6 @@ const MESSAGE_TYPE = {
 } as const;
 
 const HMAC_PREFIX = "sha256=";
-const CHANNEL_ID = "1436392484652449894" // "1442122076109406369";
 const BROADCASTER_LOGIN = "romain_roro__";
 const BROADCASTER_ID = "486250699";
 
@@ -90,7 +90,7 @@ async function handleNotification(notification: any, res: express.Response) {
     .setURL(`https://www.twitch.tv/${BROADCASTER_LOGIN}`);
 
   await sendEmbedToChannel(
-    CHANNEL_ID,
+    getChannels(Channel.NOTIFICATIONS_LIVE),
     embed,
     `<:Twitch:1441846410801578117> @everyone **${BROADCASTER_LOGIN} est maintenant en direct sur Twitch !** <:Twitch:1441846410801578117>`,
     button
