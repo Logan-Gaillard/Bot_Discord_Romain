@@ -4,6 +4,7 @@ import env from "../../config.js";
 
 const CLIENT_ID = env.TWITCH_CLIENT_ID;
 const CLIENT_SECRET = env.TWITCH_CLIENT_SECRET;
+const BROADCASTER_ID = env.TWITCH_USER_ID || "1323092263";
 
 async function getAllSubs() {
   const token = await getAccessToken();
@@ -18,7 +19,6 @@ async function getAllSubs() {
   );
   
   const data = await res.json() as any; // ← Type forcé en any
-  console.log("Récupération des EventSub :", data);
   return data;
 }
 
@@ -65,12 +65,12 @@ export async function initEventSubRenew() {
     const env = process.env.ENVIRONMENT || "development";
     const callbackUrl =
       env === "production"
-        ? "https://romain_bot.logangaillard.fr/twitch/eventsub"
+        ? "https://romain-bot.logangaillard.fr/twitch/eventsub"
         : "https://statue-astronaut-paragraph.ngrok-free.dev/twitch/eventsub";
 
     await createSub(
       "stream.online",
-      { broadcaster_user_id: "1323092263" },
+      { broadcaster_user_id: BROADCASTER_ID },
       callbackUrl
     );
   }
