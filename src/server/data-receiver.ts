@@ -142,6 +142,9 @@ export const listen = () => {
   const app: express.Application = express();
   app.use(express.raw({ type: "application/json" }));
   app.post("/twitch/eventsub", eventSubHandler);
+  app.get("/", (req: express.Request, res: express.Response) => {
+    res.json({ health: "Ok" });
+  })
 
   app.listen(3000, () => {
     console.log("Serveur EventSub en écoute sur le port 3000");

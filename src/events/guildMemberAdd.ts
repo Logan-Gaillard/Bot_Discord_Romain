@@ -13,7 +13,17 @@ const randomMessages = [
   `La piste que {user} suivait l'avait mené jusqu'ici, nous pouvons le féliciter.`,
   `Ce que {user} ne le savais-tu pas, une poubelle malicieuse l'attendait déjà`,
   `{user} fit son entrée. J'avais terriblement envie d'une pizza de la mama`,
-  `Ce n'était en réalité pas l'électricien, mais {user} qui venait de rejoindre`
+  `Ce n'était en réalité pas l'électricien, mais {user} qui venait de rejoindre`,
+  `Je chiais ardemment mon âme sur le trône lorsque {user} rejoigna le serveur`,
+  `Le lobotomisateur sortit de nulle part. C'était {user}`,
+  `{user} fit son entrée. Le lobotricien veillait déjà`,
+  `J'allais me faire une citronnade au citron lorsque {user} rappligna`,
+  `{user} rejoigna le serveur. "Je vais te toucher la nuit"`,
+  `Je jouais aux échecs avec mon pote à la compote lorsque {user} se joignit à nous`,
+  `La poubelle malicieuse était à ma poursuite quand {user} rejoigna le serveur`,
+  `{user} rejoigna le serveur. La créature l'attendait de pied ferme`,
+  `Je partis faire mes courses quand je sentis une présence. C'était {user}`,
+  `Larry m'observait. Il savait que {user} allait rappliquer`,
 ]
 
 export default {
