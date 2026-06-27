@@ -62,11 +62,7 @@ export async function initEventSubRenew() {
       await deleteSub(sub.id);
     }
 
-    const env = process.env.ENVIRONMENT || "development";
-    const callbackUrl =
-      env === "production"
-        ? "https://romain-bot.logangaillard.fr/twitch/eventsub"
-        : "https://statue-astronaut-paragraph.ngrok-free.dev/twitch/eventsub";
+    const callbackUrl = env.TWITCH_URL || "https://romain-bot.logangaillard.fr/twitch/eventsub"
 
     await createSub(
       "stream.online",
