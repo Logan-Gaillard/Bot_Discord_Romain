@@ -10,7 +10,7 @@ import { listen } from "./server/data-receiver.js";
 listen();
 
 export const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 }) as any;
 client.commands = new Collection();
 
