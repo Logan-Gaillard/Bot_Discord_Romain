@@ -69,7 +69,7 @@ async function handleNotification(notification: any, res: express.Response) {
 
   console.log(streamData);
 
-  const streamInfo = streamData?.data?.[0];
+  const streamInfo = (streamData as any)?.data?.[0];
   if (!streamInfo) return res.sendStatus(204);
 
   const embed: EmbedBuilder = new EmbedBuilder()

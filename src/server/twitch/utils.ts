@@ -31,6 +31,6 @@ export async function getTwitchStream(userId: string) {
 }
 
 export async function getTwitchAvatar(userId: string) {
-  const profile = await getTwitchProfile(userId);
+  const profile = await getTwitchProfile(userId) as any;
   return profile.data[0].profile_image_url;
 }

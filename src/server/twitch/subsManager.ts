@@ -17,11 +17,12 @@ async function getAllSubs() {
     }
   );
   
-  const data = await res.json(); // ← parse le body JSON
+  const data = await res.json() as any; // ← Type forcé en any
   console.log("Récupération des EventSub :", data);
   return data;
 }
-async function createSub(type, condition, callback) {
+
+async function createSub(type: string, condition: any, callback: string) { // ← Types ajoutés
   const token = await getAccessToken();
 
   await fetch("https://api.twitch.tv/helix/eventsub/subscriptions", {
@@ -50,7 +51,7 @@ export async function initEventSubRenew() {
   const subs = await getAllSubs();
 
   const validSubs = subs.data.filter(
-    (sub) => sub.status === "enabled" || sub.status === "webhook_callback_verification_pending"
+    (sub: any) => sub.status === "enabled" || sub.status === "webhook_callback_verification_pending"
   );
 
   if (validSubs.length === 0) {

@@ -20,7 +20,7 @@ export async function getAccessToken() {
       method: "POST",
     }
   );
-  const data = await res.json();
+  const data = await res.json() as any;
 
   accessToken = data.access_token;
   tokenExpiry = now + data.expires_in * 1000 - 60000; // expire 1 min avant pour être sûr

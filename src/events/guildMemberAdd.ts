@@ -13,8 +13,6 @@ export default {
     if (!channel || !channel.isTextBased()) return;
     let pathImage = await makeWelcomeImage(member.user);
 
-    console.log(pathImage);
-
     await channel.send({ files: [pathImage] });
 
     console.log(`Nouveau membre : ${member.user.tag} a rejoint le serveur ${member.guild.name}`);

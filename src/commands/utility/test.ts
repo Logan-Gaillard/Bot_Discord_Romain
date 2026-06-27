@@ -13,13 +13,13 @@ export default {
     .setDescription("Test d'une fonctionnalité"),
 
   async execute(interaction: ChatInputCommandInteraction) {
-    if (interaction.channel.guild.id !== "1437881720421744662") return;
+    // if (interaction.channel.guild.id !== "1437881720421744662") return;
     await interaction.reply({
       content: "Test en cours...",
       flags: MessageFlags.Ephemeral,
     });
 
-    interaction.client.emit(
+    await interaction.client.emit(
       Events.GuildMemberAdd,
       interaction.member as GuildMember
     );
