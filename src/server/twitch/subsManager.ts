@@ -22,7 +22,7 @@ async function getAllSubs() {
   return data;
 }
 
-async function createSub(type: string, condition: any, callback: string) { // ← Types ajoutés
+async function createSub(type: string, condition: any, callback: string) {
   const token = await getAccessToken();
 
   await fetch("https://api.twitch.tv/helix/eventsub/subscriptions", {

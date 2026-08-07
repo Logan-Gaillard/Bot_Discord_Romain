@@ -26,6 +26,8 @@ const HMAC_PREFIX = "sha256=";
 const BROADCASTER_LOGIN = "romain_roro__";
 const BROADCASTER_ID = "486250699";
 
+var lastBroadcastID = undefined
+
 // ── HMAC ──────────────────────────────────────────────────────────────────────
 
 function buildHmacMessage(req: express.Request): string {
@@ -72,6 +74,10 @@ async function handleNotification(notification: any, res: express.Response) {
   const streamInfo = (streamData as any)?.data?.[0];
   if (!streamInfo) return res.sendStatus(204);
 
+  if(streamInfo.id === lastBroadcastID) return res.sendStatus(204)
+  lastBroadcastID = streamInfo.id
+
+
   const embed: EmbedBuilder = new EmbedBuilder()
     .setAuthor({ name: `${BROADCASTER_LOGIN} est en direct sur Twitch !`, iconURL: avatar })
     .setTitle(streamInfo.title)
@@ -92,7 +98,7 @@ async function handleNotification(notification: any, res: express.Response) {
   await sendEmbedToChannel(
     getChannels(Channel.NOTIFICATIONS_LIVE),
     embed,
-    `<:Twitch:1441846410801578117> @everyone **${BROADCASTER_LOGIN} est maintenant en direct sur Twitch !** <:Twitch:1441846410801578117>`,
+    `<:Twitch:1441846410801578117> <@&1469382428735832167> **${BROADCASTER_LOGIN} est maintenant en direct sur Twitch !** <:Twitch:1441846410801578117>`,
     button
   );
 
