@@ -1,9 +1,8 @@
 import { MongoClient, Db } from "mongodb";
-import dotenv from "dotenv";
-dotenv.config();
+import env from "../../config.js";
 
-const url = `mongodb://${encodeURIComponent(process.env.MONGODB_USER!)}:${encodeURIComponent(process.env.MONGODB_PASSWORD!)}@${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/?authSource=admin`;
-const dbName = process.env.MONGODB_NAME;
+const url = `mongodb://${encodeURIComponent(env.MONGODB_USER!)}:${encodeURIComponent(env.MONGODB_PASSWORD!)}@${env.MONGODB_HOST}:${env.MONGODB_PORT}/?authSource=admin`;
+const dbName = env.MONGODB_NAME;
 
 if (!url || !dbName) {
     throw new Error("MONGODB_URL et MONGODB_NAME doivent être définis dans .env");
