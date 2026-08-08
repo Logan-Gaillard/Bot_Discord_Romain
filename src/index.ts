@@ -9,6 +9,9 @@ import fs from "node:fs";
 import { listen } from "./server/data-receiver.js";
 listen();
 
+import mongoService from "./services/mongodb/database.js";
+await mongoService.connect()
+
 export const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
 }) as any;
@@ -58,6 +61,11 @@ for (const file of eventFiles) {
     client.on(evt.name, (...args) => evt.execute(...args));
   }
 }
+
+process.on("SIGINT", async () => {
+    await mongoService.disconnect();
+    process.exit(0);
+});
 
 const token = env.DISCORD_TOKEN ? env.DISCORD_TOKEN : "";
 client.login(token);
