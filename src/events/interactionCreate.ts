@@ -5,6 +5,8 @@ import {
   MessageFlags,
 } from "discord.js";
 
+import env from "../config.js";
+
 export default {
   name: Events.InteractionCreate,
   async execute(interaction) {
@@ -15,6 +17,15 @@ export default {
     if (!command) {
       console.error(`Aucun commande trouvée pour ${interaction.commandName}`);
       return;
+    }
+
+    const DEV_IDS = env.DEV_IDS?.split(",") ?? [];
+
+    if (command.devOnly && !DEV_IDS.includes(interaction.user.id)) {
+        return interaction.reply({
+            content: "Cette commande est réservée aux développeurs du bot.",
+            flags: MessageFlags.Ephemeral,
+        });
     }
 
     try {
