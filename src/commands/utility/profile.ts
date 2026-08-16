@@ -44,7 +44,7 @@ export default {
           value: `${xpInfo.level}`
         }
       )
-      .setFooter({text: "Made with ❤️ by **Octokling**"})
+      .setFooter({text: "Made with ❤️ by Octokling"})
 
     await interaction.channel.send({embeds: [embed]})
     await interaction.reply({content: "Profile affiché", flags: MessageFlags.Ephemeral})
