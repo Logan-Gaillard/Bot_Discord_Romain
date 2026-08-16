@@ -11,12 +11,12 @@ import userProfile from "../../services/user/userProfile.js";
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("profile")
-    .setDescription("Permettre de connaitre les statistiques de votre profile ou celle des autres")
+    .setName("profil")
+    .setDescription("Permettre de connaitre les statistiques de votre profil ou celle des autres")
     .addUserOption((option) =>
       option
         .setName("utilisateur")
-        .setDescription("Sélectionnez un utilisateur pour accéder à son profile.")
+        .setDescription("Sélectionnez un utilisateur pour accéder à son profil.")
         .setRequired(false)
     ),
 
@@ -32,7 +32,7 @@ export default {
     const xpInfo = await profile.getUserXP()
 
     const embed = new EmbedBuilder()
-      .setTitle(`Profile de ${escapeMarkdown(user.globalName)}`)
+      .setTitle(`Profil de ${escapeMarkdown(user.globalName)}`)
       .setThumbnail(user.displayAvatarURL())
       .addFields(
         {
@@ -47,6 +47,6 @@ export default {
       .setFooter({text: "Made with ❤️ by Octokling"})
 
     await interaction.channel.send({embeds: [embed]})
-    await interaction.reply({content: "Profile affiché", flags: MessageFlags.Ephemeral})
+    await interaction.reply({content: "Profil affiché", flags: MessageFlags.Ephemeral})
   },
 };
