@@ -6,12 +6,9 @@ import {
   escapeMarkdown
 } from "discord.js";
 import { getGuildLeaderboard } from "../../services/server/users.js";
+import { calculateLevel } from "../../services/utils.js";
 
-function calculateLevel(xp: number): number {
-  return Math.floor((-60 + Math.sqrt(60 ** 2 + 4 * 30 * xp)) / (2 * 30));
-}
-
-const getRankIcon = (index: number) => ["🥇", "🥈", "🥉"][index] || `**${index + 1}.**`;
+const getRankIcon = (index: number) => ["🥇", "🥈", "🥉"][index] || `**${index + 1}. **`;
 
 export default {
   data: new SlashCommandBuilder()
@@ -30,28 +27,21 @@ export default {
       });
     }
 
-    // Récupère les membres du serveur pour avoir leurs pseudos locaux
     const userIds = users.map(u => u.userId);
     const members = await interaction.guild.members.fetch({ user: userIds });
 
+    const leaderboardText = users.map((u, i) => {
+      const member = members.get(u.userId);
+      const displayName = member ? escapeMarkdown(member.displayName) : escapeMarkdown(u.name);
+      return `${getRankIcon(i)} **${displayName}** - Lvl **${calculateLevel(u.xp)}** (${u.xp} XP)`;
+    }).join("\n\n");
+
     const embed = new EmbedBuilder()
-      .setTitle(`🏆 Classement du serveur`)
+      .setTitle("🏆 Classement du serveur")
       .setThumbnail(interaction.guild.iconURL() ?? null)
-      .setColor("#2b2d31")
-      .addFields(
-        { name: "Rang", value: users.map((_, i) => getRankIcon(i)).join("\n\n"), inline: true },
-        { 
-          name: "Joueur", 
-          value: users.map(u => {
-            const member = members.get(u.userId);
-            const name = member ? `<@${u.userId}>` : u.name; 
-            return `**${name}**`;
-          }).join("\n\n"), 
-          inline: true 
-        },
-        { name: "Niveau (XP)", value: users.map(u => `Lvl **${calculateLevel(u.xp)}** (${u.xp})`).join("\n\n"), inline: true }
-      )
-      .setFooter({ text: "Made by Octokling" })
+      embed.setColor("#dada00")
+      .setDescription(leaderboardText)
+      .setFooter({ text: "Bot malicieux", iconURL: interaction.client.user.displayAvatarURL() })
       .setTimestamp();
 
     await interaction.reply({ embeds: [embed] });
