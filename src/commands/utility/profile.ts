@@ -5,7 +5,9 @@ import {
   Interaction,
   ChatInputCommandInteraction,
   MessageFlags,
-  escapeMarkdown
+  escapeMarkdown,
+  APIEmbedField,
+  RestOrArray
 } from "discord.js";
 import userProfile from "../../services/user/userProfile.js";
 
@@ -21,6 +23,7 @@ export default {
     ),
 
   async execute(interaction: ChatInputCommandInteraction) {
+    const isLooking = !!interaction.options.getUser("utilisateur")
     const user = interaction.options.getUser("utilisateur") || interaction.user
 
     const profile = userProfile(user, interaction.guildId)
@@ -31,20 +34,35 @@ export default {
 
     const xpInfo = await profile.getUserXP()
 
+    let fields :  RestOrArray<APIEmbedField> = [
+      {
+        name: "Niveau :",
+        value: `${xpInfo.level}`,
+        inline: true
+      },
+      {
+        name: "XP :",
+        value: `${xpInfo.xp}`,
+        inline: true
+      }
+    ]
+
+    if(!isLooking){
+      fields = [
+        ...fields,
+        {
+          name: "Malices",
+          value: `${xpInfo.coins}`
+        }
+      ]
+    }
+
     const embed = new EmbedBuilder()
       .setTitle(`Profil de ${escapeMarkdown(user.globalName)}`)
+      .setDescription(isLooking && `Demandé par <@${interaction.user.id}>`)
       .setThumbnail(user.displayAvatarURL())
-      .addFields(
-        {
-          name: "XP :",
-          value: `${xpInfo.xp}`
-        },
-        {
-          name: "Niveau :",
-          value: `${xpInfo.level}`
-        }
-      )
-      .setFooter({text: "Made with ❤️ by Octokling"})
+      .addFields(fields)
+      .setFooter({text: "Made by Octokling"})
 
     await interaction.channel.send({embeds: [embed]})
     await interaction.reply({content: "Profil affiché", flags: MessageFlags.Ephemeral})

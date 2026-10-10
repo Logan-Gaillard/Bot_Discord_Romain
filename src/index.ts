@@ -13,7 +13,7 @@ import mongoService from "./services/mongodb/database.js";
 await mongoService.connect()
 
 export const client = new Client({
-  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates],
 }) as any;
 client.commands = new Collection();
 

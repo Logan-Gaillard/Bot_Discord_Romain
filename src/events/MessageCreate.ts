@@ -16,7 +16,7 @@ export default {
         const randomXP = Math.floor(Math.random() * (50 - 15 + 1))
 
         if(lastDropXP && Date.now() - lastDropXP.getTime() < randomXPCooldown) return // Pas d'xp
-        await profile.dataFunction.addXP(randomXP)
+        await profile.dataFunction.addXP(randomXP, "message")
         const xpAmount = await profile.getUserXP();
 
         console.log(`${message.author.username} possède maintenant ${xpAmount.xp}xp soit un level de ${xpAmount.level}`)

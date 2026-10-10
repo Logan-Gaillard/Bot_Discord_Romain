@@ -1,10 +1,12 @@
 import database from "../mongodb/database.js";
 import { IUser } from "../mongodb/ICollections.js";
 import { User } from "discord.js";
+import { calculateLevel } from "../utils.js";
 
 export interface UserXPStat {
     xp: number;
     level: number;
+    coins: number;
 }
 
 const createUser = async ({ guildId, name, userId }: Pick<IUser, "guildId" | "name" | "userId">): Promise<IUser> => {
@@ -53,7 +55,7 @@ const getOrCreateUser = async (author: User, guildId: string): Promise<IUser> =>
 const userProfile = (author: User, guildId: string) => {
     const getUserXP = async (): Promise<UserXPStat> => {
         const userData = await getOrCreateUser(author, guildId);
-        return { xp: userData.xp, level: calculateLevel(userData.xp) };
+        return { xp: userData.xp, level: calculateLevel(userData.xp), coins: userData.coins};
     };
 
     const getLastXPDate = async (): Promise<Date> => {
@@ -61,29 +63,50 @@ const userProfile = (author: User, guildId: string) => {
         return userData.lastXpAt;
     };
 
-    const addXP = async (amount: number): Promise<void> => {
+    const addCoins = async (amount: number, reason?: string): Promise<void> => {
         const db = database.getDb();
-        if (!db) throw new Error("Une erreur est survenue lors de la communication avec la base de données");
+        if (!db) return;
+        
+        await db.collection<IUser>("users").updateOne(
+            { _id: `${guildId}-${author.id}` },
+            { $inc: { coins: amount },$currentDate: { updatedAt: true } }
+        );
+        console.log(`Ajout de ${amount} coins à ${author.username} ${reason ? `(${reason})` : ""}`);
+    };
 
-        await getOrCreateUser(author, guildId); // garantit que l'utilisateur existe avant l'update
-        const id = `${guildId}-${author.id}`;
+    const addXP = async (amount: number, reason: string): Promise<void> => {
+        const db = database.getDb();
+        if (!db) throw new Error("Erreur DB");
+
+        const userData = await getOrCreateUser(author, guildId);
+        const currentLevel = calculateLevel(userData.xp);
 
         await db.collection<IUser>("users").updateOne(
-            { _id: id },
-            { $inc: { xp: amount }, $currentDate: { updatedAt: true, lastXpAt: true } }
+            { _id: `${guildId}-${author.id}` },
+            { $inc: { xp: amount },$currentDate: { updatedAt: true, lastXpAt: true } }
         );
-        console.log(`Ajout de ${amount}xp à ${author.username}`);
+        console.log(`Ajout de ${amount}xp à ${author.username} pour ${reason}`);
+
+        const newLevel = calculateLevel(userData.xp + amount);
+        if (newLevel > currentLevel) {
+            let coinsToGive = 0;
+
+            for (let lvl = currentLevel + 1; lvl <= newLevel; lvl++) {
+                coinsToGive += 5; // 5 coins par niveau
+                if (lvl % 5 === 0) coinsToGive += 15; // Bonus tous les 5 niveaux
+            }
+
+            if (coinsToGive > 0) {
+                await addCoins(coinsToGive, `Passage du niveau ${currentLevel} à ${newLevel}`);
+            }
+        }
     };
 
     return {
         getUserXP,
         getLastXPDate,
-        dataFunction: { addXP },
+        dataFunction: { addXP, addCoins },
     };
 };
-
-function calculateLevel(xp: number): number {
-    return Math.floor((-60 + Math.sqrt(60 ** 2 + 4 * 30 * xp)) / (2 * 30));
-}
 
 export default userProfile;
